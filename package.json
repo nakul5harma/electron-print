@@ -1,0 +1,29 @@
+{
+  "name": "electron-print",
+  "version": "1.0.0",
+  "description": "Demo POC for printer integration for Electron app",
+  "main": "main.js",
+  "dependencies": {
+    "electron": "^10.1.5"
+  },
+  "devDependencies": {
+    "eslint": "^7.12.1",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "prettier": "^2.1.2"
+  },
+  "scripts": {
+    "format": "prettier --write \"src/**/*.{js,css,html}\"",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --cache --ext .js",
+    "start": "electron ."
+  },
+  "keywords": [
+    "electron",
+    "print",
+    "electron-printer-integration",
+    "printer-integration"
+  ],
+  "author": "Nakul Sharma (https://www.linkedin.com/in/nakul-sharma-600a20a4/)",
+  "license": "MIT"
+}
