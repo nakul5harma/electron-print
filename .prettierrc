@@ -15,5 +15,6 @@
         "parser": "json"
       }
     }
-  ]
+  ],
+  "endOfLine": "lf"
 }
