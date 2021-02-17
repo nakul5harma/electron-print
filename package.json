@@ -1,5 +1,6 @@
 {
   "name": "electron-print",
+  "productName": "electron-print",
   "version": "1.0.0",
   "description": "Demo POC for printer integration for Electron app",
   "main": "main.js",
@@ -8,6 +9,8 @@
     "pdf-to-printer": "^1.7.0"
   },
   "devDependencies": {
+    "electron-installer-windows": "^3.0.0",
+    "electron-packager": "^15.2.0",
     "eslint": "^7.12.1",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.1",
@@ -17,7 +20,10 @@
     "format": "prettier --write \"src/**/*.{js,css,html}\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --cache --ext .js",
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-packager . electron-print --platform win32 --arch x64 --out dist/",
+    "prepackage:win": "npm run build",
+    "package:win": "electron-installer-windows --src dist/electron-print-win32-x64/ --dest dist/installers/"
   },
   "keywords": [
     "electron",
