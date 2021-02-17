@@ -1,4 +1,6 @@
 const { ipcRenderer, remote } = require('electron');
+const path = require('path');
+const fs = require('fs');
 
 // Importing BrowserWindow from Main
 const { BrowserWindow } = remote;
@@ -72,26 +74,29 @@ url.addEventListener('click', () => {
   });
 });
 
-const printFileByFilePath = (fileName) => {
-  ipcRenderer.invoke('print-receipt', fileName);
+const printFileByFilePath = (fileName, fileExt) => {
+  const filePath = path.join(__dirname, '..', 'assets', fileName);
+  const base64fileBuffer = fs.readFileSync(filePath, { encoding: 'base64' });
+
+  ipcRenderer.invoke('print-receipt', base64fileBuffer, fileExt);
 };
 
 bwPng.addEventListener('click', () => {
-  printFileByFilePath(receiptFileNames.bwPng);
+  printFileByFilePath(receiptFileNames.bwPng, 'png');
 });
 
 bwPdf3Inch.addEventListener('click', () => {
-  printFileByFilePath(receiptFileNames.bwPdf3Inch);
+  printFileByFilePath(receiptFileNames.bwPdf3Inch, 'pdf');
 });
 
 bwPdfActualSize.addEventListener('click', () => {
-  printFileByFilePath(receiptFileNames.bwPdfActualSize);
+  printFileByFilePath(receiptFileNames.bwPdfActualSize, 'pdf');
 });
 
 colorPng.addEventListener('click', () => {
-  printFileByFilePath(receiptFileNames.colorPng);
+  printFileByFilePath(receiptFileNames.colorPng, 'png');
 });
 
 colorPdf3Inch.addEventListener('click', () => {
-  printFileByFilePath(receiptFileNames.colorPdf3Inch);
+  printFileByFilePath(receiptFileNames.colorPdf3Inch, 'pdf');
 });

@@ -1,6 +1,32 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('path');
 const ptp = require('pdf-to-printer');
+const fs = require('fs');
+const path = require('path');
+
+const getPledgeReceiptDir = () => path.join(app.getPath('pictures'), 'pledge-receipts');
+
+// eslint-disable-next-line no-console
+const logError = (err) => err && console.error(err);
+
+const mkdir = (pledgeReceiptPath) => {
+  fs.stat(pledgeReceiptPath, (err, stats) => {
+    if (err && err.code !== 'ENOENT') {
+      logError(err);
+    }
+
+    if (err || !stats.isDirectory()) {
+      fs.mkdir(pledgeReceiptPath, logError);
+    }
+  });
+};
+
+const rm = (pledgeReceiptPath) => {
+  fs.unlink(pledgeReceiptPath, (error) => {
+    if (error) {
+      logError(error);
+    }
+  });
+};
 
 function createWindow() {
   // Create the browser window.
@@ -18,6 +44,8 @@ function createWindow() {
 
   // Open the DevTools.
   win.webContents.openDevTools();
+
+  mkdir(getPledgeReceiptDir());
 }
 
 // This method will be called when Electron has finished
@@ -48,12 +76,27 @@ app.on('activate', () => {
 // app's specific main process code. You can also
 // put them in separate files and require them here.
 
-ipcMain.handle('print-receipt', (_event, fileName) => {
-  const filePath = path.join(__dirname, 'assets', fileName);
+ipcMain.handle('print-receipt', (_event, base64fileBuffer, fileExt) => {
+  const pledgeReceiptPath = path.join(getPledgeReceiptDir(), `${new Date().getTime()}.${fileExt}`);
+  fs.writeFile(pledgeReceiptPath, base64fileBuffer, { encoding: 'base64' }, (err) => {
+    if (err) {
+      logError(err);
+    }
 
-  // eslint-disable-next-line no-console
-  console.log('Printing file:', filePath);
+    // eslint-disable-next-line no-console
+    console.log('Printing file:', pledgeReceiptPath);
 
-  // eslint-disable-next-line no-console
-  ptp.print(filePath).then(console.log).catch(console.error);
+    // eslint-disable-next-line no-console
+    ptp
+      .print(pledgeReceiptPath)
+      .then(() => {
+        // eslint-disable-next-line no-console
+        console.log('Sent to print queue:', pledgeReceiptPath);
+        rm(pledgeReceiptPath);
+      })
+      .catch((error) => {
+        rm(pledgeReceiptPath);
+        logError(error);
+      });
+  });
 });
