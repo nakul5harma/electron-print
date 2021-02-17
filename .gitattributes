@@ -1,0 +1,10 @@
+* text eol=crlf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.icns binary
+*.mp4 binary
+*.webm binary
+*.gif binary
+*.svg binary

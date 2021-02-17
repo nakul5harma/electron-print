@@ -4,7 +4,8 @@
   "description": "Demo POC for printer integration for Electron app",
   "main": "main.js",
   "dependencies": {
-    "electron": "^10.1.5"
+    "electron": "^10.1.5",
+    "pdf-to-printer": "^1.7.0"
   },
   "devDependencies": {
     "eslint": "^7.12.1",
