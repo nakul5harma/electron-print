@@ -12,6 +12,7 @@ const bwPdf3Inch = document.getElementById('bw-pdf-3-inch');
 const bwPdfActualSize = document.getElementById('bw-pdf-actual-size');
 const colorPng = document.getElementById('color-png');
 const colorPdf3Inch = document.getElementById('color-pdf-3-inch');
+const colorPdfSinglePage = document.getElementById('color-pdf-single-page');
 
 const receiptFileNames = {
   bwPng: 'pledge_receipt_bw_images.png',
@@ -19,6 +20,7 @@ const receiptFileNames = {
   bwPdfActualSize: 'pledge_receipt_bw_images_actual_size.pdf',
   colorPng: 'pledge_receipt_color_images.png',
   colorPdf3Inch: 'pledge_receipt_color_images_3_inch.pdf',
+  colorPdfSinglePage: 'pledge_receipt_color_images_single_page.pdf',
 };
 
 const options = {
@@ -99,4 +101,8 @@ colorPng.addEventListener('click', () => {
 
 colorPdf3Inch.addEventListener('click', () => {
   printFileByFilePath(receiptFileNames.colorPdf3Inch, 'pdf');
+});
+
+colorPdfSinglePage.addEventListener('click', () => {
+  printFileByFilePath(receiptFileNames.colorPdfSinglePage, 'pdf');
 });
