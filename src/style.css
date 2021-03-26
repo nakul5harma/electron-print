@@ -1,0 +1,32 @@
+.print-container {
+  display: block;
+}
+
+.webcontent-print-container {
+  margin: 30px 20px;
+  border: 1px solid grey;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.print-button {
+  padding: 8px;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  border: none;
+}
+
+.lib-print-container {
+  margin: 30px 20px;
+  border: 1px solid grey;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.lib-select {
+  padding: 8px;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+}

@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const ptp = require('pdf-to-printer');
 const fs = require('fs');
 const path = require('path');
+const { PosPrinter } = require('electron-pos-printer');
 
 const getPledgeReceiptDir = () => path.join(app.getPath('pictures'), 'pledge-receipts');
 
@@ -78,6 +79,7 @@ app.on('activate', () => {
 
 ipcMain.handle('print-receipt', (_event, base64fileBuffer, fileExt) => {
   const pledgeReceiptPath = path.join(getPledgeReceiptDir(), `${new Date().getTime()}.${fileExt}`);
+
   fs.writeFile(pledgeReceiptPath, base64fileBuffer, { encoding: 'base64' }, (err) => {
     if (err) {
       logError(err);
@@ -86,7 +88,6 @@ ipcMain.handle('print-receipt', (_event, base64fileBuffer, fileExt) => {
     // eslint-disable-next-line no-console
     console.log('Printing file:', pledgeReceiptPath);
 
-    // eslint-disable-next-line no-console
     ptp
       .print(pledgeReceiptPath)
       .then(() => {
@@ -95,8 +96,53 @@ ipcMain.handle('print-receipt', (_event, base64fileBuffer, fileExt) => {
         rm(pledgeReceiptPath);
       })
       .catch((error) => {
-        rm(pledgeReceiptPath);
         logError(error);
+        rm(pledgeReceiptPath);
+      });
+  });
+});
+
+ipcMain.handle('print-receipt-pos', (_event, base64fileBuffer, fileExt) => {
+  const pledgeReceiptPath = path.join(getPledgeReceiptDir(), `${new Date().getTime()}.${fileExt}`);
+
+  fs.writeFile(pledgeReceiptPath, base64fileBuffer, { encoding: 'base64' }, (err) => {
+    if (err) {
+      logError(err);
+    }
+
+    const options = {
+      preview: false, // Preview in window or print
+      width: '288px', //  width of content body
+      margin: '0 0 0 0', // margin of content body
+      copies: 1, // Number of copies to print
+      printerName: 'OneNote for Windows 10', // printerName: string, check it at webContent.getPrinters()
+      timeOutPerLine: 400,
+      silent: true,
+    };
+
+    // eslint-disable-next-line no-console
+    const data = [
+      {
+        type: 'image',
+        path: pledgeReceiptPath,
+        position: 'center', // position of image: 'left' | 'center' | 'right'
+        width: 'auto', // width of image in px; default: auto
+        // height: '60px', // width of image in px; default: 50 or '50px'
+      },
+    ];
+
+    // eslint-disable-next-line no-console
+    console.log('Printing file:', data, options);
+
+    PosPrinter.print(data, options)
+      .then(() => {
+        // eslint-disable-next-line no-console
+        console.log('POS printing successful');
+        rm(pledgeReceiptPath);
+      })
+      .catch((error) => {
+        logError(error);
+        rm(pledgeReceiptPath);
       });
   });
 });

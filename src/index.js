@@ -13,6 +13,7 @@ const bwPdfActualSize = document.getElementById('bw-pdf-actual-size');
 const colorPng = document.getElementById('color-png');
 const colorPdf3Inch = document.getElementById('color-pdf-3-inch');
 const colorPdfSinglePage = document.getElementById('color-pdf-single-page');
+const libSelect = document.getElementById('lib-select');
 
 const receiptFileNames = {
   bwPng: 'pledge_receipt_bw_images.png',
@@ -76,11 +77,24 @@ url.addEventListener('click', () => {
   });
 });
 
+const getLibSelectedValue = () => libSelect.options[libSelect.selectedIndex].value;
+
 const printFileByFilePath = (fileName, fileExt) => {
   const filePath = path.join(__dirname, '..', 'assets', fileName);
   const base64fileBuffer = fs.readFileSync(filePath, { encoding: 'base64' });
+  const selectedLib = getLibSelectedValue();
 
-  ipcRenderer.invoke('print-receipt', base64fileBuffer, fileExt);
+  // eslint-disable-next-line no-console
+  console.log(`fileName - ${fileName}, fileExt - ${fileExt}, selectedLib - ${selectedLib}`);
+
+  if (selectedLib === 'pdf-to-printer') {
+    ipcRenderer.invoke('print-receipt', base64fileBuffer, fileExt);
+  } else if (selectedLib === 'print-js') {
+    // eslint-disable-next-line no-console
+    console.log('TO DO');
+  } else if (selectedLib === 'electron-pos-printer') {
+    ipcRenderer.invoke('print-receipt-pos', base64fileBuffer, fileExt);
+  }
 };
 
 bwPng.addEventListener('click', () => {

@@ -6,6 +6,7 @@
   "main": "main.js",
   "dependencies": {
     "electron": "^10.1.5",
+    "electron-pos-printer": "^1.2.4",
     "pdf-to-printer": "^1.7.0"
   },
   "devDependencies": {
