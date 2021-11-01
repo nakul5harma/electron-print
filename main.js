@@ -112,10 +112,10 @@ ipcMain.handle('print-receipt-pos', (_event, base64fileBuffer, fileExt) => {
 
     const options = {
       preview: false, // Preview in window or print
-      width: '288px', //  width of content body
+      width: '300px', //  width of content body
       margin: '0 0 0 0', // margin of content body
       copies: 1, // Number of copies to print
-      printerName: 'OneNote for Windows 10', // printerName: string, check it at webContent.getPrinters()
+      printerName: 'HiTi P525L', // printerName: string, check it at webContent.getPrinters()
       timeOutPerLine: 400,
       silent: true,
     };

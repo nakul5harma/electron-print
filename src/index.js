@@ -1,6 +1,7 @@
 const { ipcRenderer, remote } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const printJs = require('print-js');
 
 // Importing BrowserWindow from Main
 const { BrowserWindow } = remote;
@@ -13,6 +14,7 @@ const bwPdfActualSize = document.getElementById('bw-pdf-actual-size');
 const colorPng = document.getElementById('color-png');
 const colorPdf3Inch = document.getElementById('color-pdf-3-inch');
 const colorPdfSinglePage = document.getElementById('color-pdf-single-page');
+const colorJpg6x8 = document.getElementById('color-jpg-6x8');
 const libSelect = document.getElementById('lib-select');
 
 const receiptFileNames = {
@@ -22,6 +24,7 @@ const receiptFileNames = {
   colorPng: 'pledge_receipt_color_images.png',
   colorPdf3Inch: 'pledge_receipt_color_images_3_inch.pdf',
   colorPdfSinglePage: 'pledge_receipt_color_images_single_page.pdf',
+  colorJpg6x8: 'pledge-receipt_color_images_6x8.jpg',
 };
 
 const options = {
@@ -77,6 +80,17 @@ url.addEventListener('click', () => {
   });
 });
 
+const printWithPrintJs = (filePath, fileExt) => {
+  // eslint-disable-next-line no-console
+  console.log(`filePath - ${filePath}, fileExt - ${fileExt}`);
+
+  if (fileExt === 'pdf') {
+    printJs({ printable: filePath, type: 'pdf' });
+  } else if (fileExt === 'png' || fileExt === 'jpg') {
+    printJs({ printable: filePath, type: 'image' });
+  }
+};
+
 const getLibSelectedValue = () => libSelect.options[libSelect.selectedIndex].value;
 
 const printFileByFilePath = (fileName, fileExt) => {
@@ -90,8 +104,7 @@ const printFileByFilePath = (fileName, fileExt) => {
   if (selectedLib === 'pdf-to-printer') {
     ipcRenderer.invoke('print-receipt', base64fileBuffer, fileExt);
   } else if (selectedLib === 'print-js') {
-    // eslint-disable-next-line no-console
-    console.log('TO DO');
+    printWithPrintJs(filePath, fileExt);
   } else if (selectedLib === 'electron-pos-printer') {
     ipcRenderer.invoke('print-receipt-pos', base64fileBuffer, fileExt);
   }
@@ -119,4 +132,8 @@ colorPdf3Inch.addEventListener('click', () => {
 
 colorPdfSinglePage.addEventListener('click', () => {
   printFileByFilePath(receiptFileNames.colorPdfSinglePage, 'pdf');
+});
+
+colorJpg6x8.addEventListener('click', () => {
+  printFileByFilePath(receiptFileNames.colorJpg6x8, 'jpg');
 });
