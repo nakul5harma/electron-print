@@ -86,7 +86,7 @@ const printWithPrintJs = (filePath, fileExt) => {
 
   if (fileExt === 'pdf') {
     printJs({ printable: filePath, type: 'pdf' });
-  } else if (fileExt === 'png' || fileExt === 'jpg') {
+  } else if (fileExt === 'png' || fileExt === 'jpeg' || fileExt === 'jpg') {
     printJs({ printable: filePath, type: 'image' });
   }
 };
@@ -107,6 +107,8 @@ const printFileByFilePath = (fileName, fileExt) => {
     printWithPrintJs(filePath, fileExt);
   } else if (selectedLib === 'electron-pos-printer') {
     ipcRenderer.invoke('print-receipt-pos', base64fileBuffer, fileExt);
+  } else if (selectedLib === 'powershell') {
+    ipcRenderer.invoke('print-receipt-powershell', base64fileBuffer, fileExt);
   }
 };
 
@@ -135,5 +137,5 @@ colorPdfSinglePage.addEventListener('click', () => {
 });
 
 colorJpg6x8.addEventListener('click', () => {
-  printFileByFilePath(receiptFileNames.colorJpg6x8, 'jpg');
+  printFileByFilePath(receiptFileNames.colorJpg6x8, 'jpeg');
 });

@@ -3,6 +3,13 @@ const ptp = require('pdf-to-printer');
 const fs = require('fs');
 const path = require('path');
 const { PosPrinter } = require('electron-pos-printer');
+const { exec } = require('child_process');
+
+const POWERSHELL_PATH = 'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe';
+const POWERSHELL_PRINT_PDF_RECEIPT_COMMAND =
+  'Start-Process -FilePath "__filepath__" -Verb Print -PassThru | ForEach-Object{Start-Sleep 10;$_} | Stop-Process';
+const POWERSHELL_PRINT_IMAGE_RECEIPT_COMMAND =
+  'Start-Process -FilePath "__filepath__" -Verb Print | ForEach-Object{Start-Sleep 10;$_} | Stop-Process';
 
 const getPledgeReceiptDir = () => path.join(app.getPath('pictures'), 'pledge-receipts');
 
@@ -146,3 +153,53 @@ ipcMain.handle('print-receipt-pos', (_event, base64fileBuffer, fileExt) => {
       });
   });
 });
+
+ipcMain.handle(
+  'print-receipt-powershell',
+  (_event, base64String, fileExt) =>
+    new Promise((resolve, reject) => {
+      const pledgeReceiptFileName = path.join(
+        getPledgeReceiptDir(),
+        new Date().getTime().toString(),
+      );
+
+      const pledgeReceiptFilePath = `${pledgeReceiptFileName}.${fileExt}`;
+
+      fs.writeFile(
+        pledgeReceiptFilePath,
+        Buffer.from(base64String, 'base64'),
+        { encoding: 'base64' },
+        (err) => {
+          if (err) {
+            logError(err);
+            reject(err);
+          }
+
+          let powershellPrintCommand = POWERSHELL_PRINT_PDF_RECEIPT_COMMAND;
+          if (fileExt === 'jpeg' || fileExt === 'jpg' || fileExt === 'png') {
+            powershellPrintCommand = POWERSHELL_PRINT_IMAGE_RECEIPT_COMMAND;
+          }
+
+          const printReceiptCommand = `${POWERSHELL_PATH} "${powershellPrintCommand.replace(
+            '__filepath__',
+            pledgeReceiptFilePath,
+          )}"`;
+
+          console.log('printReceiptCommand:', printReceiptCommand);
+
+          exec(printReceiptCommand, (error) => {
+            if (error) {
+              rm(pledgeReceiptFilePath);
+
+              logError(error);
+              reject(error);
+            } else {
+              rm(pledgeReceiptFilePath);
+
+              resolve(true);
+            }
+          });
+        },
+      );
+    }),
+);

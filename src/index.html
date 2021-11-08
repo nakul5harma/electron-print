@@ -1,86 +1,91 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Electron Printer</title>
-    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
 
-    <link rel="stylesheet" href="./style.css" />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <title>Electron Printer</title>
+  <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
 
-  <body>
-    <h1>Electron Printer</h1>
-    We are using node
-    <script>
-      document.write(process.versions.node);
-    </script>
-    , Chrome
-    <script>
-      document.write(process.versions.chrome);
-    </script>
-    , and Electron
-    <script>
-      document.write(process.versions.electron);
-    </script>
-    .
+  <link rel="stylesheet" href="./style.css" />
+</head>
 
-    <div class="print-container">
-      <div class="webcontent-print-container">
-        <button class="webcontent-print-button print-button" id="current">
-          Print Current Content of Page
-        </button>
+<body>
+  <h1>Electron Printer</h1>
+  We are using node
+  <script>
+    document.write(process.versions.node);
+  </script>
+  , Chrome
+  <script>
+    document.write(process.versions.chrome);
+  </script>
+  , and Electron
+  <script>
+    document.write(process.versions.electron);
+  </script>
+  .
 
-        <br /><br />
-        <button class="webcontent-print-button print-button" id="url">
-          Print Google.com Homepage
-        </button>
-      </div>
+  <div class="print-container">
+    <div class="webcontent-print-container">
+      <button class="webcontent-print-button print-button" id="current">
+        Print Current Content of Page
+      </button>
 
-      <div class="lib-print-container">
-        <label for="lib-select">Select a library:</label>
-        <select class="lib-select" name="Select Library" id="lib-select">
-          <option class="lib-select-option" value="pdf-to-printer" selected>PDF To Printer</option>
-          <option class="lib-select-option" value="print-js">Print.js</option>
-          <option class="lib-select-option" value="electron-pos-printer">
-            Electron POS Printer
-          </option>
-        </select>
-
-        <br /><br />
-        <button class="lib-print-button print-button" id="bw-png">Print BW png image file</button>
-
-        <br /><br />
-        <button class="lib-print-button print-button" id="bw-pdf-3-inch">
-          Print BW 3-inch pdf file
-        </button>
-
-        <br /><br />
-        <button class="lib-print-button print-button" id="bw-pdf-actual-size">
-          Print BW actual size pdf file
-        </button>
-
-        <br /><br />
-        <button class="lib-print-button print-button" id="color-png">Print colored png file</button>
-
-        <br /><br />
-        <button class="lib-print-button print-button" id="color-pdf-3-inch">
-          Print colored 3-inch pdf file
-        </button>
-
-        <br /><br />
-        <button class="lib-print-button print-button" id="color-pdf-single-page">
-          Print single page colored pdf file
-        </button>
-
-        <br /><br />
-        <button class="lib-print-button print-button" id="color-jpg-6x8">
-          Print single page colored jpg (6x8) file
-        </button>
-      </div>
+      <br /><br />
+      <button class="webcontent-print-button print-button" id="url">
+        Print Google.com Homepage
+      </button>
     </div>
 
-    <!-- Adding Individual Renderer Process JS File -->
-    <script src="index.js"></script>
-  </body>
+    <div class="lib-print-container">
+      <label for="lib-select">Select a library:</label>
+      <select class="lib-select" name="Select Library" id="lib-select">
+        <option class="lib-select-option" value="pdf-to-printer" selected>PDF To Printer</option>
+        <option class="lib-select-option" value="print-js">Print.js</option>
+        <option class="lib-select-option" value="electron-pos-printer">
+          Electron POS Printer
+        </option>
+        <option class="lib-select-option" value="powershell">
+          Powershell
+        </option>
+      </select>
+
+      <br /><br />
+      <button class="lib-print-button print-button" id="bw-png">Print BW png image file</button>
+
+      <br /><br />
+      <button class="lib-print-button print-button" id="bw-pdf-3-inch">
+        Print BW 3-inch pdf file
+      </button>
+
+      <br /><br />
+      <button class="lib-print-button print-button" id="bw-pdf-actual-size">
+        Print BW actual size pdf file
+      </button>
+
+      <br /><br />
+      <button class="lib-print-button print-button" id="color-png">Print colored png file</button>
+
+      <br /><br />
+      <button class="lib-print-button print-button" id="color-pdf-3-inch">
+        Print colored 3-inch pdf file
+      </button>
+
+      <br /><br />
+      <button class="lib-print-button print-button" id="color-pdf-single-page">
+        Print single page colored pdf file
+      </button>
+
+      <br /><br />
+      <button class="lib-print-button print-button" id="color-jpg-6x8">
+        Print single page colored jpg (6x8) file
+      </button>
+    </div>
+  </div>
+
+  <!-- Adding Individual Renderer Process JS File -->
+  <script src="index.js"></script>
+</body>
+
 </html>
